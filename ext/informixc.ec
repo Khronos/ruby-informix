@@ -32,7 +32,7 @@
 #include <sqlstype.h>
 #include <sqltypes.h>
 
-static VALUE rb_cDate, rb_cBigDecimal, rb_cRational;
+static VALUE rb_cDate, rb_cBigDecimal; /*rb_cRational;*/
 
 /* Modules */
 static VALUE rb_mInformix;
@@ -1910,7 +1910,7 @@ make_result(cursor_t *c, VALUE record)
 			rb_ary_store(record, i, item);
 		}
         else {
-			rb_hash_aset(record, RARRAY(c->field_names)->ptr[i], item);
+			rb_hash_aset(record, RARRAY_PTR(c->field_names)[i], item);
 		}
 	}
 	return record;
@@ -2720,7 +2720,7 @@ each_by(VALUE self, VALUE n, VALUE type)
 
 	for(;;) {
 		records = fetch_many(self, n, type);
-		if (RARRAY(records)->len == 0)
+		if (RARRAY_LEN(records) == 0)
 			return self;
 		rb_yield(records);
 	}
